@@ -1,21 +1,106 @@
 package dao;
 
+import conexion.ConexionBD;
 import modelo.Producto;
-import java.util.List;
-import java.util.ArrayList;
 
-public class ProductoDao {
-    // 1. Inserción
-    public void registrar(Producto p) {}
-    
-    // 2. Consulta
-    public List<Producto> listar() {}
-    
-    // 3. Actualización
-    public List<Producto> listar() {
-    return new ArrayList<>(); 
-}
-    
-    // 4. Eliminación
-    public void eliminar(int id) {}
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class ProductoDAO {
+
+    Connection conexion;
+
+    public ProductoDAO() {
+        conexion = ConexionBD.conectar();
+    }
+
+    // INSERTAR
+    public void insertarProducto(Producto producto) {
+
+        String sql = "INSERT INTO productos(nombre, precio, cantidad) VALUES (?, ?, ?)";
+
+        try {
+
+            PreparedStatement statement = conexion.prepareStatement(sql);
+
+            statement.setString(1, producto.getNombre());
+            statement.setDouble(2, producto.getPrecio());
+            statement.setInt(3, producto.getCantidad());
+
+            statement.executeUpdate();
+
+            System.out.println("Producto insertado correctamente");
+
+        } catch (Exception e) {
+            System.out.println("Error al insertar: " + e.getMessage());
+        }
+    }
+
+    // CONSULTAR
+    public void consultarProductos() {
+
+        String sql = "SELECT * FROM productos";
+
+        try {
+
+            PreparedStatement statement = conexion.prepareStatement(sql);
+
+            ResultSet resultado = statement.executeQuery();
+
+            while (resultado.next()) {
+
+                System.out.println(
+                        resultado.getInt("id") + " - "
+                        + resultado.getString("nombre") + " - "
+                        + resultado.getDouble("precio") + " - "
+                        + resultado.getInt("cantidad")
+                );
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al consultar: " + e.getMessage());
+        }
+    }
+
+    // ACTUALIZAR
+    public void actualizarProducto(int id, String nombre) {
+
+        String sql = "UPDATE productos SET nombre=? WHERE id=?";
+
+        try {
+
+            PreparedStatement statement = conexion.prepareStatement(sql);
+
+            statement.setString(1, nombre);
+            statement.setInt(2, id);
+
+            statement.executeUpdate();
+
+            System.out.println("Producto actualizado");
+
+        } catch (Exception e) {
+            System.out.println("Error al actualizar: " + e.getMessage());
+        }
+    }
+
+    // ELIMINAR
+    public void eliminarProducto(int id) {
+
+        String sql = "DELETE FROM productos WHERE id=?";
+
+        try {
+
+            PreparedStatement statement = conexion.prepareStatement(sql);
+
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+
+            System.out.println("Producto eliminado");
+
+        } catch (Exception e) {
+            System.out.println("Error al eliminar: " + e.getMessage());
+        }
+    }
 }
