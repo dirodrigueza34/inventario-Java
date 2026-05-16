@@ -1,9 +1,9 @@
 package principal;
 
+import java.util.Scanner;
+
 import dao.ProductoDAO;
 import modelo.Producto;
-
-import java.util.Scanner;
 
 public class Main {
 
@@ -45,7 +45,7 @@ public class Main {
                     int cantidad = scanner.nextInt();
 
                     Producto producto =
-                            new Producto(nombre, precio, cantidad);
+                            new Producto(0, nombre, precio, cantidad);
 
                     dao.insertarProducto(producto);
 
@@ -73,16 +73,16 @@ public class Main {
                     System.out.print("Nueva cantidad: ");
                     int nuevaCantidad = scanner.nextInt();
 
+                
                     Producto productoActualizar =
                             new Producto(
+                                    idActualizar,
                                     nuevoNombre,
                                     nuevoPrecio,
                                     nuevaCantidad
                             );
 
-                    productoActualizar.setId(idActualizar);
-
-                    dao.actualizarProducto(productoActualizar);
+                    dao.actualizarProductoCompleto(productoActualizar);
 
                     break;
 
@@ -108,5 +108,8 @@ public class Main {
             }
 
         } while (opcion != 5);
+        
+        scanner.close(); 
     }
 }
+
