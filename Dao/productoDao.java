@@ -16,26 +16,36 @@ public class ProductoDAO {
     }
 
     // INSERTAR
-    public void insertarProducto(Producto producto) {
+public void actualizarProducto(Producto producto) {
 
-        String sql = "INSERT INTO productos(nombre, precio, cantidad) VALUES (?, ?, ?)";
+    String sql =
+            "UPDATE productos SET nombre=?, precio=?, cantidad=? WHERE id=?";
 
-        try {
+    try {
 
-            PreparedStatement statement = conexion.prepareStatement(sql);
+        PreparedStatement statement =
+                conexion.prepareStatement(sql);
 
-            statement.setString(1, producto.getNombre());
-            statement.setDouble(2, producto.getPrecio());
-            statement.setInt(3, producto.getCantidad());
+        statement.setString(1, producto.getNombre());
 
-            statement.executeUpdate();
+        statement.setDouble(2, producto.getPrecio());
 
-            System.out.println("Producto insertado correctamente");
+        statement.setInt(3, producto.getCantidad());
 
-        } catch (Exception e) {
-            System.out.println("Error al insertar: " + e.getMessage());
-        }
+        statement.setInt(4, producto.getId());
+
+        statement.executeUpdate();
+
+        System.out.println("Producto actualizado");
+
+    } catch (Exception e) {
+
+        System.out.println(
+                "Error al actualizar: "
+                        + e.getMessage()
+        );
     }
+}
 
     // CONSULTAR
     public void consultarProductos() {
